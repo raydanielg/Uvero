@@ -14,8 +14,12 @@ export async function get(req, res) {
 
 export async function listMine(req, res) {
   const { page, limit, skip, take } = parsePagination(req.query);
-  const { rows, total } = await requestsService.listMine(req.user.id, { skip, take });
-  res.json({ success: true, data: rows, meta: paginationMeta({ page, limit, total }) });
+  const { rows, total, summary } = await requestsService.listMine(req.user.id, req.query, { skip, take });
+  res.json({ success: true, data: rows, meta: { ...paginationMeta({ page, limit, total }), summary } });
+}
+
+export async function tracking(req, res) {
+  res.json({ success: true, data: await requestsService.getTracking(req.params.id, req.user.id) });
 }
 
 export async function cancel(req, res) {

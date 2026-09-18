@@ -311,6 +311,7 @@ model User {
   disputesRaised      Dispute[]            @relation("DisputeRaisedBy")
   disputesAgainst     Dispute[]            @relation("DisputeAgainst")
   auditLogs           AuditLog[]           @relation("AuditActor")
+  legalAcceptances    LegalAcceptance[]
 
   @@index([phone])
   @@index([userType, status])
@@ -1372,8 +1373,23 @@ model LegalDocument {
   effectiveAt DateTime          @default(now())
   createdAt   DateTime          @default(now())
 
+  acceptances LegalAcceptance[]
+
   @@unique([type, version])
   @@map("legal_documents")
+}
+
+model LegalAcceptance {
+  id         String        @id @default(cuid())
+  userId     String
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documentId String
+  document   LegalDocument @relation(fields: [documentId], references: [id])
+  ipAddress  String?
+  acceptedAt DateTime      @default(now())
+
+  @@unique([userId, documentId])
+  @@map("legal_acceptances")
 }
 
 // =========================================================================
