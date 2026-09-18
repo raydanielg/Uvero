@@ -39,12 +39,26 @@ export async function notify(userId, templateKey, variables = {}, channel) {
   return notification;
 }
 
-export async function listMine(userId, { unreadOnly = false } = {}) {
-  return prisma.notification.findMany({
-    where: { userId, ...(unreadOnly ? { readAt: null } : {}) },
-    orderBy: { createdAt: "desc" },
-    take: 100,
-  });
+export async function listMine(userId, { unreadOnly = false, skip, take = 50 } = {}) {
+  const where = { userId, ...(unreadOnly ? { readAt: null } : {}) };
+  const [rows, total, unread] = await Promise.all([
+    prisma.notification.findMany({ where, orderBy: { createdAt: "desc" }, skip, take }),
+    prisma.notification.count({ where }),
+    prisma.notification.count({ where: { userId, readAt: null } }),
+  ]);
+  return { rows, total, unread };
+}
+
+export async function unreadCount(userId) {
+  return prisma.notification.count({ where: { userId, readAt: null } });
+}
+
+export async function remove(userId, id) {
+  await prisma.notification.deleteMany({ where: { id, userId } });
+}
+
+export async function clearAll(userId) {
+  await prisma.notification.deleteMany({ where: { userId } });
 }
 
 export async function markRead(userId, id) {

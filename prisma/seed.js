@@ -241,13 +241,57 @@ async function seedCatalog() {
 
 async function seedLegalDocuments() {
   const docs = [
-    ["TERMS", "1.0", "<h1>Terms of Service</h1><p>Placeholder terms — replace via the admin panel.</p>"],
-    ["PRIVACY", "1.0", "<h1>Privacy Policy</h1><p>Placeholder privacy policy — replace via the admin panel.</p>"],
+    [
+      "TERMS",
+      "1.0",
+      `<h1>Terms &amp; Conditions</h1>
+<p><em>Masharti na Vigezo · Last updated 2026</em></p>
+<h2>1. About Uvero</h2>
+<p>Uvero is a marketplace that connects customers with independent service providers (towing, cleaning, plumbing and more). Uvero is not the provider of these services.</p>
+<h2>2. Your account</h2>
+<p>You must be 18 or older and provide a valid phone number. You are responsible for activity on your account. Never share your OTP code with anyone.</p>
+<h2>3. Requests &amp; pricing</h2>
+<p>Prices shown are estimates. Some services are quoted by the provider after assessing the job. The final amount is confirmed before or after the work, as shown in the app.</p>
+<h2>4. Payments</h2>
+<p>You can pay in cash or through the payment methods enabled in the app. Uvero charges a platform commission to providers, not to you, unless a service fee is shown.</p>
+<h2>5. Cancellations</h2>
+<p>You may cancel a request before a provider starts work. Late cancellations may incur a cancellation fee shown in the app.</p>
+<h2>6. Conduct</h2>
+<p>Treat providers with respect. Abuse, fraud or misuse may lead to suspension of your account.</p>
+<h2>7. Disputes</h2>
+<p>If something goes wrong, open a dispute from your completed job and our team will review it.</p>
+<h2>8. Contact</h2>
+<p>Questions? Reach us through Support in the app.</p>`,
+    ],
+    [
+      "PRIVACY",
+      "1.0",
+      `<h1>Privacy Policy</h1>
+<p><em>Sera ya Faragha · Last updated 2026</em></p>
+<h2>What we collect</h2>
+<p>Your phone number, name, optional email and avatar, saved addresses, request and payment history, and your location when you create a request or track a provider.</p>
+<h2>How we use it</h2>
+<p>To match you with providers, process payments, send notifications, prevent fraud and improve the service.</p>
+<h2>Who sees it</h2>
+<p>A provider you are matched with sees your name, request details and job location. We never sell your personal data.</p>
+<h2>Your choices</h2>
+<p>You can edit your profile, remove your avatar, clear notifications and delete your account from the app at any time.</p>
+<h2>Security</h2>
+<p>Data is encrypted in transit and access is restricted. OTP codes are stored hashed.</p>`,
+    ],
+    [
+      "REFUND_POLICY",
+      "1.0",
+      `<h1>Refund Policy</h1>
+<p>If a provider does not show up or the work is not completed, you are not charged. If you paid electronically for work that was not delivered, open a dispute within 7 days and approved refunds are returned to your payment method.</p>`,
+    ],
   ];
   for (const [type, version, bodyHtml] of docs) {
     const existing = await prisma.legalDocument.findUnique({ where: { type_version: { type, version } } });
     if (!existing) {
       await prisma.legalDocument.create({ data: { type, version, bodyHtml } });
+    } else if (existing.bodyHtml.includes("Placeholder")) {
+      await prisma.legalDocument.update({ where: { id: existing.id }, data: { bodyHtml } });
     }
   }
 }

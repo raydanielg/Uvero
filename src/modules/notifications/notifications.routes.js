@@ -7,5 +7,8 @@ export const notificationsRouter = Router();
 notificationsRouter.use(protect);
 
 notificationsRouter.get("/", controller.listMine);
+notificationsRouter.get("/unread-count", controller.unreadCount);
 notificationsRouter.post("/read-all", controller.markAllRead);
+notificationsRouter.delete("/", controller.clearAll);
 notificationsRouter.post("/:id/read", controller.markRead);
+notificationsRouter.delete("/:id", controller.remove);
