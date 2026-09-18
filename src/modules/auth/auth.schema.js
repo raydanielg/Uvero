@@ -17,7 +17,7 @@ export const verifyOtpSchema = z.object({
   phone,
   code,
   name: z.string().trim().min(2).max(60).optional(),
-  role: z.enum(["CUSTOMER", "PROVIDER"]).default("CUSTOMER"),
+  userType: z.enum(["CUSTOMER", "PROVIDER"]).default("CUSTOMER"),
 });
 
 export const refreshSchema = z.object({

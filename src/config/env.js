@@ -14,6 +14,10 @@ const envSchema = z.object({
   OTP_TTL_MINUTES: z.coerce.number().int().positive().default(5),
   OTP_LENGTH: z.coerce.number().int().min(4).max(8).default(6),
   CORS_ORIGIN: z.string().default("*"),
+  INTEGRATION_ENC_KEY: z
+    .string()
+    .min(16)
+    .default("dev-only-integration-key-change-me"),
 });
 
 const parsed = envSchema.safeParse(process.env);

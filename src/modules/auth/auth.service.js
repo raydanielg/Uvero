@@ -18,8 +18,8 @@ const PUBLIC_USER_SELECT = {
   id: true,
   phone: true,
   name: true,
-  role: true,
-  isVerified: true,
+  userType: true,
+  isPhoneVerified: true,
   avatarUrl: true,
   createdAt: true,
 };
@@ -51,7 +51,7 @@ export async function requestOtp(rawPhone) {
   };
 }
 
-export async function verifyOtp({ phone: rawPhone, code, name, role }) {
+export async function verifyOtp({ phone: rawPhone, code, name, userType }) {
   const phone = normalizePhone(rawPhone);
 
   const otp = await prisma.otpCode.findFirst({
@@ -79,8 +79,8 @@ export async function verifyOtp({ phone: rawPhone, code, name, role }) {
 
   const user = await prisma.user.upsert({
     where: { phone },
-    update: { isVerified: true },
-    create: { phone, name: name ?? null, role, isVerified: true },
+    update: { isPhoneVerified: true },
+    create: { phone, name: name ?? null, userType, isPhoneVerified: true },
   });
 
   const tokens = await issueTokens(user);
@@ -140,6 +140,6 @@ async function issueTokens(user) {
 }
 
 function pickUser(user) {
-  const { id, phone, name, role, isVerified, avatarUrl, createdAt } = user;
-  return { id, phone, name, role, isVerified, avatarUrl, createdAt };
+  const { id, phone, name, userType, isPhoneVerified, avatarUrl, createdAt } = user;
+  return { id, phone, name, userType, isPhoneVerified, avatarUrl, createdAt };
 }

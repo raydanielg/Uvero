@@ -34,12 +34,12 @@ const definition = {
           id: { type: "string", example: "clx9k2m4p0000abcd1234efgh" },
           phone: { type: "string", example: "+255712345678" },
           name: { type: "string", nullable: true, example: "Katani Adam" },
-          role: {
+          userType: {
             type: "string",
             enum: ["CUSTOMER", "PROVIDER", "ADMIN"],
             example: "CUSTOMER",
           },
-          isVerified: { type: "boolean", example: true },
+          isPhoneVerified: { type: "boolean", example: true },
           avatarUrl: { type: "string", nullable: true, example: null },
           createdAt: { type: "string", format: "date-time" },
         },
@@ -88,7 +88,7 @@ const definition = {
             example: "Katani Adam",
             description: "Display name — only used on first sign-up",
           },
-          role: {
+          userType: {
             type: "string",
             enum: ["CUSTOMER", "PROVIDER"],
             example: "CUSTOMER",

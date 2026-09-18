@@ -6,3 +6,5 @@ prisma/dev.db-journal
 src/generated/
 *.log
 .DS_Store
+uploads/*
+!uploads/.gitkeep

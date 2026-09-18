@@ -1,8 +1,13 @@
+import http from "node:http";
 import app from "./app.js";
 import { env } from "./config/env.js";
 import { prisma } from "./config/prisma.js";
+import { initSocket } from "./realtime/socket.js";
 
-const server = app.listen(env.PORT, () => {
+const httpServer = http.createServer(app);
+initSocket(httpServer);
+
+const server = httpServer.listen(env.PORT, () => {
   console.log("");
   console.log("  ██╗   ██╗██╗   ██╗███████╗██████╗  ██████╗ ");
   console.log("  ██║   ██║██║   ██║██╔════╝██╔══██╗██╔═══██╗");

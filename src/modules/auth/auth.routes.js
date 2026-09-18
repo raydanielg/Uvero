@@ -73,7 +73,7 @@ authRouter.post(
  *     summary: Verify OTP and sign in
  *     description: >
  *       Verifies the code. If the phone number has no account yet, one is
- *       created using the provided `name` and `role` — otherwise the existing
+ *       created using the provided `name` and `userType` — otherwise the existing
  *       account is signed in. Returns an access token and a refresh token
  *       (also set as an httpOnly cookie).
  *     requestBody:

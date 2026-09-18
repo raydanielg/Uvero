@@ -1,0 +1,35 @@
+// Single source of truth for every permission key in the system. The seed
+// script writes these into the `permissions` table; `requirePermission()`
+// checks against whatever a role was actually granted in the database — so
+// adding a row here and reseeding is how you add a new guardable action,
+// never an `if (role === "ADMIN")` in a controller.
+export const PERMISSIONS = [
+  ["users.view", "users", "View users"],
+  ["users.create", "users", "Create users"],
+  ["users.update", "users", "Update users"],
+  ["users.delete", "users", "Deactivate or delete users"],
+  ["providers.view", "providers", "View provider profiles"],
+  ["providers.verify", "providers", "Approve or reject provider documents"],
+  ["providers.suspend", "providers", "Suspend or lift a provider suspension"],
+  ["requests.view", "requests", "View service requests"],
+  ["requests.cancel", "requests", "Cancel a service request"],
+  ["requests.assign", "requests", "Manually assign a provider to a request"],
+  ["services.manage", "services", "Manage categories, services and pricing rules"],
+  ["payments.view", "payments", "View payments and transactions"],
+  ["payments.refund", "payments", "Issue refunds"],
+  ["withdrawals.view", "withdrawals", "View withdrawal requests"],
+  ["withdrawals.approve", "withdrawals", "Approve or reject withdrawals"],
+  ["settings.view", "settings", "View platform settings"],
+  ["settings.update", "settings", "Update platform settings"],
+  ["branding.update", "branding", "Update app branding"],
+  ["features.manage", "features", "Toggle feature flags"],
+  ["ads.manage", "ads", "Create, update or delete ads and campaigns"],
+  ["content.manage", "content", "Manage pages, FAQs, banners and announcements"],
+  ["roles.manage", "roles", "Manage roles, permissions and role assignments"],
+  ["kyc.review", "kyc", "Review KYC submissions and manage requirements"],
+  ["disputes.manage", "disputes", "Manage and resolve disputes"],
+  ["support.manage", "support", "Manage support tickets"],
+  ["integrations.manage", "integrations", "Configure payment/SMS/email/maps/storage providers"],
+  ["audit.view", "audit", "View audit logs"],
+  ["reports.view", "reports", "View reports and analytics"],
+].map(([key, module, description]) => ({ key, module, description }));

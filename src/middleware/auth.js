@@ -19,8 +19,8 @@ export async function protect(req, _res, next) {
         id: true,
         phone: true,
         name: true,
-        role: true,
-        isVerified: true,
+        userType: true,
+        isPhoneVerified: true,
         avatarUrl: true,
         createdAt: true,
       },
@@ -35,10 +35,10 @@ export async function protect(req, _res, next) {
   }
 }
 
-// Restricts a route to specific roles. Usage: restrictTo("PROVIDER", "ADMIN")
-export function restrictTo(...roles) {
+// Restricts a route to specific user types. Usage: restrictTo("PROVIDER", "ADMIN")
+export function restrictTo(...userTypes) {
   return (req, _res, next) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user || !userTypes.includes(req.user.userType)) {
       return next(ApiError.forbidden("Insufficient permissions"));
     }
     next();
