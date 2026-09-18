@@ -11,6 +11,8 @@ import { swaggerSpec } from "./config/swagger.js";
 import { apiRouter } from "./routes/index.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler, notFound } from "./middleware/error.js";
+import { requestLogger } from "./middleware/requestLogger.js";
+import { otpMonitorRouter } from "./modules/otp-monitor/otp-monitor.routes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -25,7 +27,7 @@ app.use(
     credentials: true,
   }),
 );
-app.use(morgan(isProd ? "combined" : "dev"));
+app.use(isProd ? morgan("combined") : requestLogger);
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 
@@ -64,6 +66,9 @@ app.use(
     },
   }),
 );
+
+// OTP monitor (dev dashboard; gated by OTP_MONITOR_KEY in production)
+app.use("/admin/otp-monitor", otpMonitorRouter);
 
 // API v1
 app.use("/api/v1", apiLimiter, apiRouter);

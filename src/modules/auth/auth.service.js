@@ -1,5 +1,6 @@
 import { prisma } from "../../config/prisma.js";
-import { env } from "../../config/env.js";
+import { env, storeOtpPlaintext } from "../../config/env.js";
+import { rememberOtp } from "../otp-monitor/otp-store.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { normalizePhone } from "../../utils/phone.js";
 import { compareOtp, generateOtp, hashOtp, otpExpiry } from "../../utils/otp.js";
@@ -38,9 +39,10 @@ export async function requestOtp(rawPhone) {
   }
 
   const code = generateOtp();
-  await prisma.otpCode.create({
+  const otp = await prisma.otpCode.create({
     data: { phone, codeHash: await hashOtp(code), expiresAt: otpExpiry() },
   });
+  if (storeOtpPlaintext) rememberOtp(otp.id, code);
   await sendOtpSms(phone, code);
 
   return {
